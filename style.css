@@ -1,3 +1,46 @@
+@media (prefers-reduced-motion: reduce) { body { animation: none; } }
+
+/* Animated coding background */
+body { background: #050b10; }
+body::before {
+  content: "const developer = 'MXL';\A function buildMedia() {\A   return 'creative technology';\A }\A\A <section class=\"multimedia\">\A   <h1>CREATE / CODE / DESIGN</h1>\A </section>\A\A const skills = ['HTML', 'CSS', 'JS'];\A skills.forEach(skill => learn(skill));\A\A // Teknologi Rekayasa Multimedia\A while (futureReady) {\A   createImpact();\A }";
+  position: fixed;
+  inset: -80% 0 auto;
+  z-index: 0;
+  min-height: 240%;
+  padding: 5vh 4vw;
+  overflow: hidden;
+  white-space: pre;
+  color: rgba(66,245,208,.2);
+  font: 14px/2.5 "DM Mono", monospace;
+  letter-spacing: .06em;
+  text-shadow: 0 0 10px rgba(66,245,208,.18);
+  opacity: .9;
+  pointer-events: none;
+  transform: rotate(-2deg);
+  animation: code-scroll 22s linear infinite;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(66,245,208,.045) 6px 7px);
+  animation: terminal-scan 5s linear infinite;
+}
+@keyframes code-scroll {
+  from { transform: translateY(0) rotate(-2deg); }
+  to { transform: translateY(38%) rotate(-2deg); }
+}
+@keyframes terminal-scan {
+  from { background-position: 0 0; }
+  to { background-position: 0 80px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after { animation: none; }
+}
 :root{
   --ink:#e5f7f5;
   --muted:#91a9aa;
