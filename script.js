@@ -25,7 +25,7 @@ function renderProducts(list){
         <span class="symbol">${p.symbol}</span>
       </div>
       <div class="product-info">
-        <div class="product-meta"><span>NEXA / 0${p.id}</span><span>DIGITAL</span></div>
+        <div class="product-meta"><span>MXL / 0${p.id}</span><span>DIGITAL</span></div>
         <h3>${p.name}</h3>
         <p>${p.desc}</p>
         <div class="product-bottom">
