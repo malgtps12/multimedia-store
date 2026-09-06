@@ -19,6 +19,132 @@ body {
   font-family: "Space Grotesk", sans-serif;
 }
 
+@keyframes page-rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes art-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes luxury-glow {
+  0% { transform: translateX(-120%) rotate(18deg); opacity: 0; }
+  25%, 70% { opacity: .55; }
+  100% { transform: translateX(140%) rotate(18deg); opacity: 0; }
+}
+
+@keyframes shape-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0); }
+  50% { transform: translate3d(14px, -12px, 0) rotate(8deg); }
+}
+
+@keyframes button-shine {
+  from { transform: translateX(-160%) skewX(-20deg); }
+  to { transform: translateX(220%) skewX(-20deg); }
+}
+
+@keyframes hero-pulse {
+  0%, 100% { box-shadow: 0 28px 50px rgba(78, 50, 136, .12); }
+  50% { box-shadow: 0 34px 68px rgba(107, 60, 229, .28); }
+}
+
+.nav {
+  animation: page-rise .7s ease both;
+}
+.hero > div:first-child {
+  animation: page-rise .8s .12s ease both;
+}
+.hero-art {
+  animation: page-rise .8s .25s ease both, hero-pulse 5s 1s ease-in-out infinite;
+}
+.hero-art .shape-a {
+  animation: art-breathe 6s 1s ease-in-out infinite;
+}
+.hero-art .shape-b {
+  animation: shape-drift 8s 1.2s ease-in-out infinite;
+}
+.hero-art .shape-c {
+  animation: shape-drift 7s 1.5s ease-in-out infinite reverse;
+}
+.hero-art::after {
+  content: "";
+  position: absolute;
+  inset: -35% auto -35% -30%;
+  width: 22%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: luxury-glow 7s 1.2s ease-in-out infinite;
+}
+.primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.primary::after {
+  content: "";
+  position: absolute;
+  inset: -80% auto -80% -35%;
+  width: 24%;
+  background: rgba(255,255,255,.3);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  z-index: -1;
+  animation: button-shine 5s 1.5s ease-in-out infinite;
+}
+.section,
+.promo,
+footer {
+  animation: page-rise .8s .35s ease both;
+}
+.profile-layout,
+.education-card,
+.step-grid,
+.about-grid,
+.info-grid {
+  animation: page-rise .8s .5s ease both;
+}
+.profile-photo-card,
+.profile-info,
+.education-item,
+.step-card,
+.info-card {
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.profile-photo-card:hover,
+.profile-info:hover,
+.education-item:hover,
+.step-card:hover,
+.info-card:hover {
+  transform: translateY(-7px);
+  border-color: #cbb7f5;
+  box-shadow: 0 20px 34px rgba(81,54,141,.12);
+}
+.profile-image {
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.profile-photo-card:hover .profile-image {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 a { color: inherit; }
 
 .nav {
@@ -449,6 +575,91 @@ h1 {
   color: var(--muted);
 }
 
+.education-card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.education-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 12px 24px rgba(81,54,141,.04);
+}
+.education-number {
+  color: var(--primary);
+  font: 12px "DM Mono";
+  padding-top: 4px;
+}
+.education-level {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font: 10px "DM Mono";
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.education-item h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.live-status {
+  padding-top: 40px;
+}
+.live-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.live-card {
+  position: relative;
+  overflow: hidden;
+  padding: 26px 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f3ecff 100%);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(81,54,141,.05);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.live-card::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  right: -28px;
+  bottom: -38px;
+  border: 1px solid rgba(107,60,229,.2);
+  border-radius: 50%;
+}
+.live-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 20px 34px rgba(81,54,141,.12);
+}
+.live-label {
+  margin: 0 0 16px;
+  color: var(--primary);
+  font: 10px "DM Mono";
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.live-card strong {
+  display: block;
+  color: var(--ink);
+  font: 700 clamp(27px, 3vw, 42px) "DM Mono";
+  letter-spacing: -.06em;
+}
+.live-card span {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .step-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -539,6 +750,43 @@ h1 {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
+}
+.social-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+.social-links a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: background .25s ease, border-color .25s ease, transform .25s ease;
+}
+.social-links a:hover,
+.social-links a:focus-visible {
+  background: var(--soft);
+  border-color: var(--primary);
+  transform: translateX(5px);
+}
+.social-links span {
+  color: var(--muted);
+  font: 10px "DM Mono";
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.social-links strong {
+  color: var(--primary);
+  font: 14px "DM Mono";
+}
+.social-card {
+  background: linear-gradient(135deg, #f1e8ff 0%, #ffffff 100%);
+  border-color: #d4c1fa;
 }
 .alumni-card {
   background: linear-gradient(135deg, #f4edff 0%, #ffffff 100%);
@@ -677,6 +925,8 @@ footer {
   .about-grid,
   .step-grid,
   .info-grid,
+  .education-card,
+  .live-status-grid,
   .profile-layout { grid-template-columns: 1fr; }
   .profile-photo { min-height: 300px; }
   .profile-image { object-position: center center; }
