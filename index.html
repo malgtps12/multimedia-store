@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEXA — creative store untuk kebutuhan multimedia.">
+  <title>NEXA — Multimedia Creative Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="logo" href="#">NEXA<span>.</span></a>
+    <nav>
+      <a href="#shop">Shop</a>
+      <a href="#categories">Categories</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="cart-button" id="cartButton">Bag <span id="cartCount">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">NEXA / CREATIVE STORE / 2026</p>
+        <h1>TOOLS FOR<br><i>BETTER</i><br>IDEAS.</h1>
+        <p class="hero-copy">Asset, template, preset, dan gear pilihan untuk mahasiswa multimedia yang ingin mengubah ide menjadi karya.</p>
+        <a href="#shop" class="btn primary">Belanja Sekarang ↓</a>
+      </div>
+      <div class="hero-art">
+        <div class="shape shape-a"></div>
+        <div class="shape shape-b"></div>
+        <div class="shape shape-c">N</div>
+        <span class="art-label">CREATIVE<br>SUPPLY<br>01—26</span>
+      </div>
+    </section>
+
+    <section class="category-strip" id="categories">
+      <button class="filter active" data-category="all">ALL</button>
+      <button class="filter" data-category="design">DESIGN</button>
+      <button class="filter" data-category="photo">PHOTO</button>
+      <button class="filter" data-category="video">VIDEO</button>
+      <button class="filter" data-category="audio">AUDIO</button>
+      <button class="filter" data-category="3d">3D</button>
+    </section>
+
+    <section class="shop section" id="shop">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">01 / SHOP</p>
+          <h2>CURATED<br><span>CREATIVE GOODS.</span></h2>
+        </div>
+        <p class="count" id="productCount">6 PRODUCTS</p>
+      </div>
+      <div class="products" id="products"></div>
+    </section>
+
+    <section class="promo">
+      <div>
+        <p class="eyebrow">NEXA SELECT</p>
+        <h2>MAKE LESS.<br>MEAN MORE.</h2>
+      </div>
+      <p>Produk digital tidak harus membuat proses kreatif semakin rumit. Pilih alat yang mengurangi pekerjaan repetitif dan menyisakan ruang untuk berpikir.</p>
+    </section>
+
+    <section class="about section" id="about">
+      <p class="eyebrow">02 / WHY NEXA</p>
+      <div class="about-grid">
+        <h2>STORE YANG<br><span>NGERTI KREATIF.</span></h2>
+        <div>
+          <p>Kami menyusun produk berdasarkan workflow kreator: mulai dari mencari ide, membuat visual, mengedit video, merancang suara, sampai mempresentasikan hasil.</p>
+          <div class="stats">
+            <div><b>06</b><small>CURATED ITEMS</small></div>
+            <div><b>04</b><small>CREATIVE FIELDS</small></div>
+            <div><b>01</b><small>BIG IDEA</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="cart" id="cart">
+    <div class="cart-head">
+      <h2>YOUR BAG</h2>
+      <button id="closeCart">×</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="cart-footer">
+      <div><span>Subtotal</span><strong id="subtotal">Rp0</strong></div>
+error: failed to push some refs to 'https://github.com/malgtps12/multimedia-store.git'      <div class="payment-box">
+        <span>Metode pembayaran</span>
+        <strong>DANA</strong>
+        <small>0895 1635 3968</small>
+      </div>
+      <button class="btn primary checkout" id="checkout">Bayar via DANA</button>
+      <small>Transfer otomatis ke nomor DANA pilihan Anda.</small>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
+  <footer>
+    <span>NEXA. / MULTIMEDIA CREATIVE STORE</span>
+    <span>© 2026</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
