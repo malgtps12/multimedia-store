@@ -1,3 +1,14 @@
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+
+function openAtTop() {
+  window.scrollTo(0, 0);
+}
+
+openAtTop();
+window.addEventListener("pageshow", openAtTop);
+
 const pageOpenedAt = Date.now();
 const birthdayMonth = 8;
 const birthdayDay = 12;
