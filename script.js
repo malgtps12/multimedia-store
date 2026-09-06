@@ -107,35 +107,21 @@ document.getElementById("cartButton").addEventListener("click",openCart);
 document.getElementById("closeCart").addEventListener("click",closeCart);
 overlay.addEventListener("click",closeCart);
 
-const DANA_NUMBER = "089516353968";
+const WHATSAPP_NUMBER = "089516353968";
 
-function payWithDana(){
+function payViaWhatsApp(){
   if(!cart.length) return;
 
   const total = cart.reduce((sum,p)=>sum + p.price*p.qty,0);
-  const message = `Halo, saya ingin membayar pesanan NEXA sebesar ${rupiah(total)}. Nomor tujuan DANA: ${DANA_NUMBER}`;
+  const orderDetails = cart.map(p => `${p.name} (${p.qty}x) = ${rupiah(p.price * p.qty)}`).join("\n");
+  const message = `Halo, saya ingin membeli produk berikut:\n\n${orderDetails}\n\nTotal: ${rupiah(total)}\n\nMohon konfirmasi order dan instruksi pembayaran selanjutnya.`;
+  const whatsappURL = `https://wa.me/62${WHATSAPP_NUMBER.slice(1)}?text=${encodeURIComponent(message)}`;
 
-  try {
-    navigator.clipboard.writeText(DANA_NUMBER);
-  } catch (error) {
-    console.log("Clipboard not available, using fallback.");
-  }
-
-  const danaAppURL = `dana://send?phone=${DANA_NUMBER}&amount=${Math.round(total)}&text=${encodeURIComponent("Pembayaran NEXA")}`;
-  const whatsappURL = `https://wa.me/62${DANA_NUMBER.slice(1)}?text=${encodeURIComponent(message)}`;
-
-  window.location.href = danaAppURL;
-
-  setTimeout(() => {
-    window.open(whatsappURL, "_blank", "noopener,noreferrer");
-  }, 500);
-
-  setTimeout(() => {
-    alert(`Silakan kirim pembayaran ke DANA ${DANA_NUMBER}.\n\nTotal: ${rupiah(total)}\n\nNomor telah disalin ke clipboard. Jika DANA app tidak terbuka, silakan bayar via WhatsApp yang baru saja dibuka.`);
-  }, 800);
+  window.open(whatsappURL, "_blank", "noopener,noreferrer");
+  alert(`Pembayaran akan dilakukan via WhatsApp ke ${WHATSAPP_NUMBER}.\n\nDetail order sudah dikirimkan.\n\nTotal: ${rupiah(total)}`);
 }
 
-document.getElementById("checkout").addEventListener("click", payWithDana);
+document.getElementById("checkout").addEventListener("click", payViaWhatsApp);
 
 renderProducts(products);
 renderCart();
