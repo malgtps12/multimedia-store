@@ -45,8 +45,18 @@ if (!reducedMotion && "IntersectionObserver" in window) {
  * gesture apa pun dari pengguna (sentuh/klik) memulainya — tanpa UI undangan.
  */
 const backgroundMusic = document.getElementById("backgroundMusic");
+const musicToggle = document.getElementById("musicToggle");
 const MUSIC_VOLUME = 0.35;
 let musicAudible = false;
+
+function updateMusicToggle() {
+  if (!backgroundMusic || !musicToggle) return;
+  const isPlaying = !backgroundMusic.paused && !backgroundMusic.muted;
+  musicToggle.classList.toggle("is-playing", isPlaying);
+  musicToggle.setAttribute("aria-pressed", String(isPlaying));
+  musicToggle.setAttribute("aria-label", isPlaying ? "Jeda musik" : "Putar musik");
+  musicToggle.setAttribute("title", isPlaying ? "Jeda musik" : "Putar musik");
+}
 
 function startBackgroundMusic() {
   if (!backgroundMusic) return;
@@ -60,6 +70,18 @@ function startBackgroundMusic() {
   setTimeout(checkAudible, 300);
 }
 
+// Mulai audio dalam mode MUTED. Selalu diizinkan browser (tanpa gesture).
+// Audio berjalan diam-diam, lalu suara menyala begitu ada gesture sah.
+function startMutedMusic() {
+  if (!backgroundMusic || musicAudible) return;
+  try {
+    backgroundMusic.muted = true;
+    backgroundMusic.volume = MUSIC_VOLUME;
+    backgroundMusic.play().catch(() => {});
+  } catch (_) {}
+  setTimeout(checkAudible, 300);
+}
+
 function checkAudible() {
   if (!backgroundMusic) return;
   if (!backgroundMusic.paused && !backgroundMusic.muted) {
@@ -68,6 +90,33 @@ function checkAudible() {
   } else {
     musicAudible = false;
   }
+  updateMusicToggle();
+}
+
+if (musicToggle && backgroundMusic) {
+  // Tombol memiliki gesture sendiri; cegah listener global mengubah status lebih dulu.
+  ["pointerdown", "touchend", "keydown"].forEach((eventName) => {
+    musicToggle.addEventListener(eventName, (event) => event.stopPropagation());
+  });
+
+  musicToggle.addEventListener("click", (event) => {
+    // Jangan biarkan handler klik global menjalankan audio lagi setelah pengguna menekan jeda.
+    event.stopPropagation();
+    unlockAudioContext();
+
+    if (!backgroundMusic.paused && !backgroundMusic.muted) {
+      backgroundMusic.pause();
+      musicAudible = false;
+      updateMusicToggle();
+      return;
+    }
+
+    startBackgroundMusic();
+  });
+
+  backgroundMusic.addEventListener("play", updateMusicToggle);
+  backgroundMusic.addEventListener("pause", updateMusicToggle);
+  backgroundMusic.addEventListener("volumechange", updateMusicToggle);
 }
 
 function handleAudioActivation(event) {
@@ -103,19 +152,40 @@ window.addEventListener("load", () => {
   setTimeout(startBackgroundMusic, 3000);
 });
 
-// Satu gesture di mana pun (termasuk scroll) = sesi dibuka.
-const activationEvents = ["pointerdown", "touchend", "keydown", "click", "wheel", "scroll", "touchmove"];
+// Scroll (wheel/touchmove/scroll) TIDAK dianggap user activation di Chrome
+// Android — jadi saat scroll, mulai audio muted dulu, lalu begitu ada gesture
+// sah (tap/lepas jari/keyboard/click) audio langsung di-unmute dan terdengar.
+const activationEvents = ["pointerdown", "touchend", "keydown", "click"];
+const scrollEvents = ["wheel", "scroll", "touchmove"];
+
 function gestureHandler(event) {
   unlockAudioContext();
   handleAudioActivation(event);
+  // Audio muted yang sudah berjalan -> bunyikan.
+  if (backgroundMusic && !backgroundMusic.paused) {
+    backgroundMusic.muted = false;
+    checkAudible();
+  }
+}
+function scrollHandler() {
+  unlockAudioContext();
+  if (musicAudible) return;
+  startMutedMusic();
+  startBackgroundMusic();
 }
 activationEvents.forEach((eventName) => {
   window.addEventListener(eventName, gestureHandler, { passive: true });
+});
+scrollEvents.forEach((eventName) => {
+  window.addEventListener(eventName, scrollHandler, { passive: true, once: true });
 });
 
 function detachActivationListeners() {
   activationEvents.forEach((eventName) => {
     window.removeEventListener(eventName, gestureHandler);
+  });
+  scrollEvents.forEach((eventName) => {
+    window.removeEventListener(eventName, scrollHandler);
   });
 }
 

@@ -1178,3 +1178,78 @@ body[data-theme="purple"] .live-card {
     animation: none;
   }
 }
+
+/* Kontrol musik manual ketika autoplay diblokir browser. */
+.music-toggle {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 15px 0 11px;
+  color: #fff;
+  font: 500 11px/1 "DM Mono", monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 999px;
+  background: rgba(18, 11, 32, .78);
+  box-shadow: 0 10px 28px rgba(18, 11, 32, .28), inset 0 1px 0 rgba(255,255,255,.16);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform .22s ease, background .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.music-toggle:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.8);
+  background: rgba(67, 38, 111, .9);
+  box-shadow: 0 14px 32px rgba(18, 11, 32, .35), 0 0 0 4px rgba(110, 70, 190, .16);
+}
+
+.music-toggle:focus-visible {
+  outline: 2px solid #65f5d0;
+  outline-offset: 3px;
+}
+
+.music-toggle__icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #65f5d0;
+  border-radius: 50%;
+  background: rgba(101,245,208,.14);
+}
+
+.music-toggle svg { grid-area: 1 / 1; width: 15px; height: 15px; }
+.music-toggle .icon-pause { opacity: 0; transform: scale(.65); }
+.music-toggle.is-playing .icon-play { opacity: 0; transform: scale(.65); }
+.music-toggle.is-playing .icon-pause { opacity: 1; transform: scale(1); }
+.music-toggle svg { transition: opacity .18s ease, transform .18s ease; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .music-toggle { right: 15px; bottom: 15px; min-height: 42px; padding-right: 13px; }
+  .music-toggle__label { display: none; }
+  .music-toggle { width: 42px; justify-content: center; padding: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-toggle, .music-toggle svg { transition: none; }
+}
