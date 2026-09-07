@@ -40,17 +40,69 @@ if (!reducedMotion && "IntersectionObserver" in window) {
   });
 }
 
+/*
+ * Konsep ala Claude.ai: bukan memaksa autoplay, tapi mengundang pengguna
+ * dengan elegan untuk "membuka sesi" — satu klik di mana pun memulai musik.
+ * Jika browser mengizinkan autoplay, musik menyala sendiri tanpa undangan.
+ */
 const backgroundMusic = document.getElementById("backgroundMusic");
+const MUSIC_VOLUME = 0.35;
+let musicAudible = false;
 
 function startBackgroundMusic() {
   if (!backgroundMusic) return;
-  backgroundMusic.volume = 0.35;
-  void backgroundMusic.play().catch(() => {});
+  backgroundMusic.volume = MUSIC_VOLUME;
+  backgroundMusic.muted = false;
+  backgroundMusic.play().then(() => {
+    musicAudible = true;
+    removeEnterInvite();
+  }).catch(() => {});
 }
 
-window.addEventListener("load", startBackgroundMusic);
-["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
-  window.addEventListener(eventName, startBackgroundMusic, { once: true, passive: true });
+// Undangan "membuka sesi" ala Claude, muncul setelah animasi pembuka.
+let enterInvite = null;
+
+function showEnterInvite() {
+  if (musicAudible || enterInvite || !backgroundMusic) return;
+  enterInvite = document.createElement("div");
+  enterInvite.className = "enter-invite";
+  enterInvite.setAttribute("role", "button");
+  enterInvite.setAttribute("aria-label", "Mulai musik latar");
+  enterInvite.innerHTML =
+    '<span class="enter-invite-icon">\u266A</span>' +
+    '<span class="enter-invite-text">Klik di mana saja untuk memulai musik</span>';
+  document.body.appendChild(enterInvite);
+
+  // Animasi masuk.
+  requestAnimationFrame(() => enterInvite.classList.add("is-visible"));
+}
+
+function removeEnterInvite() {
+  if (!enterInvite) return;
+  const node = enterInvite;
+  enterInvite = null;
+  node.classList.remove("is-visible");
+  node.classList.add("is-leaving");
+  setTimeout(() => node.remove(), 600);
+}
+
+function handleAudioActivation() {
+  startBackgroundMusic();
+  removeEnterInvite();
+}
+
+window.addEventListener("load", () => {
+  // Autoplay penuh (browser mungkin mengizinkan).
+  startBackgroundMusic();
+  // Setelah animasi pembuka (3s), jika masih bisu -> tampilkan undangan.
+  setTimeout(() => {
+    if (!musicAudible) showEnterInvite();
+  }, 3000);
+});
+
+// Satu gesture di mana pun = sesi dibuka.
+["pointerdown", "keydown", "touchstart", "wheel"].forEach((eventName) => {
+  window.addEventListener(eventName, handleAudioActivation, { once: true, passive: true });
 });
 
 const pageOpenedAt = Date.now();
