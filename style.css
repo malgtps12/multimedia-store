@@ -750,7 +750,6 @@ h3,
   border-radius: 12px;
   transition: background .25s ease, border-color .25s ease, transform .25s ease;
 }
-<<<<<<< HEAD
 .social-platform {
   display: inline-flex;
   align-items: center;
@@ -770,8 +769,6 @@ h3,
   fill: var(--primary);
   stroke: none;
 }
-=======
->>>>>>> 0bbf565e803c46396ca75d37aec92cf02f2d06be
 .social-links a:hover,
 .social-links a:focus-visible {
   background: var(--soft);
@@ -911,8 +908,6 @@ footer { border-top-color: var(--line); }
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
 }
-<<<<<<< HEAD
-
 :root {
   --ink: #241b2f;
   --muted: #756b7f;
@@ -1065,5 +1060,3 @@ body[data-theme="purple"] .live-card {
   }
 }
 
-=======
->>>>>>> 0bbf565e803c46396ca75d37aec92cf02f2d06be

@@ -9,7 +9,6 @@ function openAtTop() {
 openAtTop();
 window.addEventListener("pageshow", openAtTop);
 
-<<<<<<< HEAD
 const themeButtons = document.querySelectorAll("[data-theme-choice]");
 const themeStorageKey = "multimedia-theme-v3";
 const savedTheme = localStorage.getItem(themeStorageKey) || "simple";
@@ -29,9 +28,6 @@ themeButtons.forEach((button) => {
 });
 
 setTheme(savedTheme);
-
-=======
->>>>>>> 0bbf565e803c46396ca75d37aec92cf02f2d06be
 const pageOpenedAt = Date.now();
 const birthdayMonth = 8;
 const birthdayDay = 12;
