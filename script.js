@@ -9,25 +9,6 @@ function openAtTop() {
 openAtTop();
 window.addEventListener("pageshow", openAtTop);
 
-const themeButtons = document.querySelectorAll("[data-theme-choice]");
-const themeStorageKey = "multimedia-theme-v3";
-const savedTheme = localStorage.getItem(themeStorageKey) || "simple";
-
-function setTheme(theme) {
-  document.body.dataset.theme = theme;
-  themeButtons.forEach((button) => {
-    const isActive = button.dataset.themeChoice === theme;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-pressed", String(isActive));
-  });
-  localStorage.setItem(themeStorageKey, theme);
-}
-
-themeButtons.forEach((button) => {
-  button.addEventListener("click", () => setTheme(button.dataset.themeChoice));
-});
-
-setTheme(savedTheme);
 const pageOpenedAt = Date.now();
 const birthdayMonth = 8;
 const birthdayDay = 12;
