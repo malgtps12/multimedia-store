@@ -103,8 +103,8 @@ window.addEventListener("load", () => {
   setTimeout(startBackgroundMusic, 3000);
 });
 
-// Satu gesture di mana pun = sesi dibuka (tanpa UI undangan).
-const activationEvents = ["pointerdown", "touchend", "keydown", "click"];
+// Satu gesture di mana pun (termasuk scroll) = sesi dibuka.
+const activationEvents = ["pointerdown", "touchend", "keydown", "click", "wheel", "scroll", "touchmove"];
 function gestureHandler(event) {
   unlockAudioContext();
   handleAudioActivation(event);
