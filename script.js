@@ -9,6 +9,37 @@ function openAtTop() {
 openAtTop();
 window.addEventListener("pageshow", openAtTop);
 
+const pageTransition = document.createElement("div");
+pageTransition.className = "page-transition";
+pageTransition.setAttribute("aria-hidden", "true");
+[
+  "page-transition-panel page-transition-panel-left",
+  "page-transition-panel page-transition-panel-right"
+].forEach((className) => {
+  const panel = document.createElement("span");
+  panel.className = className;
+  pageTransition.appendChild(panel);
+});
+document.body.appendChild(pageTransition);
+
+const scrollSections = document.querySelectorAll("main > section:not(.hero), footer");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!reducedMotion && "IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-revealed");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+
+  scrollSections.forEach((section) => {
+    section.classList.add("scroll-reveal");
+    revealObserver.observe(section);
+  });
+}
+
 const backgroundMusic = document.getElementById("backgroundMusic");
 
 function startBackgroundMusic() {
