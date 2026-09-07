@@ -41,9 +41,8 @@ if (!reducedMotion && "IntersectionObserver" in window) {
 }
 
 /*
- * Konsep ala Claude.ai: bukan memaksa autoplay, tapi mengundang pengguna
- * dengan elegan untuk "membuka sesi" — satu klik di mana pun memulai musik.
- * Jika browser mengizinkan autoplay, musik menyala sendiri tanpa undangan.
+ * Musik latar: autoplay penuh jika diizinkan browser; jika diblokir,
+ * gesture apa pun dari pengguna (sentuh/klik) memulainya — tanpa UI undangan.
  */
 const backgroundMusic = document.getElementById("backgroundMusic");
 const MUSIC_VOLUME = 0.35;
@@ -53,57 +52,72 @@ function startBackgroundMusic() {
   if (!backgroundMusic) return;
   backgroundMusic.volume = MUSIC_VOLUME;
   backgroundMusic.muted = false;
-  backgroundMusic.play().then(() => {
+  const attempt = backgroundMusic.play();
+  if (attempt && typeof attempt.then === "function") {
+    attempt.then(checkAudible).catch(() => {});
+  }
+  // Verifikasi via status elemen, bukan promise (lebih akurat di mobile).
+  setTimeout(checkAudible, 300);
+}
+
+function checkAudible() {
+  if (!backgroundMusic) return;
+  if (!backgroundMusic.paused && !backgroundMusic.muted) {
     musicAudible = true;
-    removeEnterInvite();
-  }).catch(() => {});
+    detachActivationListeners();
+  } else {
+    musicAudible = false;
+  }
 }
 
-// Undangan "membuka sesi" ala Claude, muncul setelah animasi pembuka.
-let enterInvite = null;
-
-function showEnterInvite() {
-  if (musicAudible || enterInvite || !backgroundMusic) return;
-  enterInvite = document.createElement("div");
-  enterInvite.className = "enter-invite";
-  enterInvite.setAttribute("role", "button");
-  enterInvite.setAttribute("aria-label", "Mulai musik latar");
-  enterInvite.innerHTML =
-    '<span class="enter-invite-icon">\u266A</span>' +
-    '<span class="enter-invite-text">Klik di mana saja untuk memulai musik</span>';
-  document.body.appendChild(enterInvite);
-
-  // Animasi masuk.
-  requestAnimationFrame(() => enterInvite.classList.add("is-visible"));
-}
-
-function removeEnterInvite() {
-  if (!enterInvite) return;
-  const node = enterInvite;
-  enterInvite = null;
-  node.classList.remove("is-visible");
-  node.classList.add("is-leaving");
-  setTimeout(() => node.remove(), 600);
-}
-
-function handleAudioActivation() {
+function handleAudioActivation(event) {
+  // iOS/Android butuh play() SINKRON di dalam gesture.
+  // JANGAN panggil load() di sini — load() mereset elemen dan membatalkan play().
   startBackgroundMusic();
-  removeEnterInvite();
+  backgroundMusic && backgroundMusic.addEventListener("canplay", () => {
+    if (!backgroundMusic.paused) return;
+    startBackgroundMusic();
+  }, { once: true });
+}
+
+// Unlock audio via AudioContext (cadangan untuk WebView/Chrome Android).
+let audioContext = null;
+function unlockAudioContext() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx || audioContext) return;
+    audioContext = new Ctx();
+    const buffer = audioContext.createBuffer(1, 1, 22050);
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+    if (audioContext.state === "suspended") audioContext.resume();
+  } catch (_) {}
 }
 
 window.addEventListener("load", () => {
   // Autoplay penuh (browser mungkin mengizinkan).
   startBackgroundMusic();
-  // Setelah animasi pembuka (3s), jika masih bisu -> tampilkan undangan.
-  setTimeout(() => {
-    if (!musicAudible) showEnterInvite();
-  }, 3000);
+  // Coba lagi tepat saat animasi pembuka (3s) selesai.
+  setTimeout(startBackgroundMusic, 3000);
 });
 
-// Satu gesture di mana pun = sesi dibuka.
-["pointerdown", "keydown", "touchstart", "wheel"].forEach((eventName) => {
-  window.addEventListener(eventName, handleAudioActivation, { once: true, passive: true });
+// Satu gesture di mana pun = sesi dibuka (tanpa UI undangan).
+const activationEvents = ["pointerdown", "touchend", "keydown", "click"];
+function gestureHandler(event) {
+  unlockAudioContext();
+  handleAudioActivation(event);
+}
+activationEvents.forEach((eventName) => {
+  window.addEventListener(eventName, gestureHandler, { passive: true });
 });
+
+function detachActivationListeners() {
+  activationEvents.forEach((eventName) => {
+    window.removeEventListener(eventName, gestureHandler);
+  });
+}
 
 const pageOpenedAt = Date.now();
 const birthdayMonth = 8;

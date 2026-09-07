@@ -1,4 +1,4 @@
-@media (prefers-reduced-motion: reduce) { body { animation: none; } }
+﻿@media (prefers-reduced-motion: reduce) { body { animation: none; } }
 
 /* Animated coding background */
 body { background: #050b10; }
@@ -1177,84 +1177,4 @@ body[data-theme="purple"] .live-card {
     transition: none;
     animation: none;
   }
-}
-/* Undangan "membuka sesi" ala Claude — muncul setelah animasi pembuka. */
-.enter-invite {
-  position: fixed;
-  left: 50%;
-  bottom: 5.5vh;
-  z-index: 120;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 22px;
-  border: 1px solid rgba(66,245,208,.45);
-  border-radius: 999px;
-  background: rgba(11, 24, 26, .82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 26px rgba(66,245,208,.14);
-  color: var(--ink);
-  font: 11px/1.4 "DM Mono", monospace;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  user-select: none;
-  opacity: 0;
-  transform: translate(-50%, 16px);
-  transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1),
-    border-color .3s ease, box-shadow .3s ease;
-  animation: invite-breathe 2.6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.enter-invite.is-visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
-}
-
-.enter-invite.is-leaving {
-  opacity: 0;
-  transform: translate(-50%, 12px);
-  pointer-events: none;
-}
-
-.enter-invite:hover {
-  border-color: var(--accent);
-  box-shadow: 0 14px 34px rgba(0,0,0,.5), 0 0 34px rgba(66,245,208,.28);
-}
-
-.enter-invite-icon {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border: 1px solid rgba(66,245,208,.5);
-  border-radius: 50%;
-  color: var(--accent);
-  font-size: 13px;
-  animation: invite-note-pulse 1.6s ease-in-out infinite;
-}
-
-.enter-invite-text { white-space: nowrap; }
-
-@keyframes invite-breathe {
-  0%, 100% { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 22px rgba(66,245,208,.12); }
-  50% { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 34px rgba(66,245,208,.24); }
-}
-
-@keyframes invite-note-pulse {
-  0%, 100% { transform: scale(1); opacity: .85; }
-  50% { transform: scale(1.12); opacity: 1; }
-}
-
-@media (max-width: 560px) {
-  .enter-invite { bottom: 4vh; max-width: calc(100vw - 36px); }
-  .enter-invite-text { white-space: normal; text-align: center; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .enter-invite,
-  .enter-invite-icon { animation: none; transition: opacity .3s ease; }
 }
