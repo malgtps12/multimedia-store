@@ -193,6 +193,54 @@ const pageOpenedAt = Date.now();
 const birthdayMonth = 8;
 const birthdayDay = 12;
 
+function isBirthdayToday(date = new Date()) {
+  return date.getMonth() === birthdayMonth && date.getDate() === birthdayDay;
+}
+
+function showBirthdayCelebration() {
+  if (!isBirthdayToday()) return;
+
+  const celebration = document.createElement("section");
+  celebration.className = "birthday-celebration";
+  celebration.setAttribute("role", "dialog");
+  celebration.setAttribute("aria-modal", "true");
+  celebration.setAttribute("aria-labelledby", "birthdayCelebrationTitle");
+  celebration.innerHTML = `
+    <div class="birthday-celebration__glow" aria-hidden="true"></div>
+    <div class="birthday-celebration__confetti" aria-hidden="true"></div>
+    <div class="birthday-celebration__card">
+      <p class="birthday-celebration__eyebrow">12 SEPTEMBER / HARI SPESIAL</p>
+      <p class="birthday-celebration__cake" aria-hidden="true">🎂</p>
+      <h2 id="birthdayCelebrationTitle">OWNER WEBNYA<br><span>LAGI ULTAH NIH!</span></h2>
+      <p>Ayo ucapin ultah ke ownernya!</p>
+      <a class="birthday-celebration__close" href="https://wa.me/6289516353968?text=Selamat%20ulang%20tahun%21%20Semoga%20selalu%20sehat%20dan%20sukses." target="_blank" rel="noopener noreferrer">Ucapkan Selamat Ulang Tahun <span aria-hidden="true">→</span></a>
+    </div>`;
+
+  const confettiContainer = celebration.querySelector(".birthday-celebration__confetti");
+  const colors = ["#65f5d0", "#ffcf5a", "#ff7bac", "#d5b5ff", "#ffffff"];
+  for (let index = 0; index < 48; index += 1) {
+    const confetti = document.createElement("i");
+    confetti.style.setProperty("--x", `${Math.random() * 100}%`);
+    confetti.style.setProperty("--delay", `${Math.random() * 1.4}s`);
+    confetti.style.setProperty("--duration", `${2.6 + Math.random() * 2.1}s`);
+    confetti.style.setProperty("--rotate", `${Math.round(Math.random() * 540 - 270)}deg`);
+    confetti.style.setProperty("--color", colors[index % colors.length]);
+    confettiContainer.appendChild(confetti);
+  }
+
+  function closeCelebration() {
+    celebration.classList.add("is-closing");
+    window.setTimeout(() => celebration.remove(), 450);
+  }
+
+  celebration.querySelector(".birthday-celebration__close").addEventListener("click", closeCelebration);
+  document.body.appendChild(celebration);
+  window.setTimeout(closeCelebration, 3000);
+}
+
+// Sambutan hanya dibuat saat tanggal lokal pengunjung adalah 12 September.
+window.setTimeout(showBirthdayCelebration, 350);
+
 function pad(value) {
   return String(value).padStart(2, "0");
 }

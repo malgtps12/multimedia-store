@@ -1183,7 +1183,7 @@ body[data-theme="purple"] .live-card {
 .music-toggle {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  top: 24px;
   z-index: 90;
   display: inline-flex;
   align-items: center;
@@ -1245,11 +1245,114 @@ body[data-theme="purple"] .live-card {
 }
 
 @media (max-width: 600px) {
-  .music-toggle { right: 15px; bottom: 15px; min-height: 42px; padding-right: 13px; }
+  .music-toggle { right: 15px; top: 15px; min-height: 42px; padding-right: 13px; }
   .music-toggle__label { display: none; }
   .music-toggle { width: 42px; justify-content: center; padding: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .music-toggle, .music-toggle svg { transition: none; }
+}
+
+/* Sambutan ulang tahun khusus 12 September. */
+.birthday-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+  color: #fff;
+  background: rgba(15, 8, 29, .76);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: birthday-overlay-in .45s ease-out both;
+}
+
+.birthday-celebration__glow {
+  position: absolute;
+  width: min(74vw, 760px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(from 30deg, #65f5d0, #7756d8, #ff7bac, #ffcf5a, #65f5d0);
+  filter: blur(80px);
+  opacity: .52;
+  animation: birthday-glow 5s linear infinite;
+}
+
+.birthday-celebration__card {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 610px);
+  padding: clamp(34px, 6vw, 68px);
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.45);
+  background: rgba(28, 14, 54, .74);
+  box-shadow: 0 28px 90px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.24);
+  animation: birthday-card-in .75s cubic-bezier(.16,1,.3,1) .12s both;
+}
+
+.birthday-celebration__eyebrow {
+  margin: 0 0 13px;
+  color: #65f5d0;
+  font: 500 11px/1.4 "DM Mono", monospace;
+  letter-spacing: .2em;
+}
+
+.birthday-celebration__cake { margin: 0 0 6px; font-size: clamp(48px, 8vw, 72px); animation: birthday-cake 1.4s ease-in-out infinite; }
+.birthday-celebration h2 { margin: 0; font: 700 clamp(43px, 8vw, 78px)/.84 "Space Grotesk", sans-serif; letter-spacing: -.07em; }
+.birthday-celebration h2 span { color: #65f5d0; }
+.birthday-celebration__card > p:not(.birthday-celebration__eyebrow):not(.birthday-celebration__cake) { max-width: 405px; margin: 25px auto 29px; color: rgba(255,255,255,.83); font-size: 15px; line-height: 1.7; }
+
+.birthday-celebration__close {
+  display: inline-block;
+  padding: 13px 20px;
+  color: #160d2a;
+  font: 500 11px/1 "DM Mono", monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 0;
+  background: #65f5d0;
+  text-decoration: none;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.birthday-celebration__close:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(101,245,208,.32); }
+.birthday-celebration__close:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+
+.birthday-celebration__confetti { position: absolute; inset: 0; pointer-events: none; }
+.birthday-celebration__confetti i {
+  position: absolute;
+  top: -12vh;
+  left: var(--x);
+  width: 10px;
+  height: 18px;
+  background: var(--color);
+  box-shadow: 0 0 12px var(--color);
+  animation: birthday-confetti var(--duration) linear var(--delay) infinite;
+}
+
+.birthday-celebration.is-closing { animation: birthday-overlay-out .45s ease-in forwards; pointer-events: none; }
+@keyframes birthday-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes birthday-overlay-out { to { opacity: 0; visibility: hidden; } }
+@keyframes birthday-card-in { from { opacity: 0; transform: translateY(35px) scale(.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes birthday-glow { to { transform: rotate(360deg) scale(1.08); } }
+@keyframes birthday-cake { 50% { transform: translateY(-8px) rotate(3deg); } }
+@keyframes birthday-confetti { to { transform: translate3d(-12vw, 120vh, 0) rotate(var(--rotate)); } }
+
+@media (max-width: 600px) {
+  .birthday-celebration { padding: 16px; }
+  .birthday-celebration__card { padding: 38px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birthday-celebration,
+  .birthday-celebration__glow,
+  .birthday-celebration__card,
+  .birthday-celebration__cake,
+  .birthday-celebration__confetti i {
+    animation: none;
+  }
+  .birthday-celebration__confetti { display: none; }
 }
