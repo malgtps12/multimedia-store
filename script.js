@@ -119,6 +119,77 @@ if (musicToggle && backgroundMusic) {
   backgroundMusic.addEventListener("volumechange", updateMusicToggle);
 }
 
+// Geser tombol musik ke mana saja (drag), klik biasa tetap memutar/jeda.
+if (musicToggle) {
+  let dragging = false;
+  let moved = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function positionButton(left, top) {
+    const rect = musicToggle.getBoundingClientRect();
+    const maxLeft = window.innerWidth - rect.width;
+    const maxTop = window.innerHeight - rect.height;
+    musicToggle.style.left = `${clamp(left, 8, Math.max(maxLeft, 8))}px`;
+    musicToggle.style.top = `${clamp(top, 8, Math.max(maxTop, 8))}px`;
+    musicToggle.style.right = "auto";
+  }
+
+  musicToggle.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 && event.pointerType === "mouse") return;
+    dragging = true;
+    moved = false;
+    startX = event.clientX;
+    startY = event.clientY;
+    const rect = musicToggle.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop = rect.top;
+    musicToggle.setPointerCapture(event.pointerId);
+  });
+
+  musicToggle.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    const dx = event.clientX - startX;
+    const dy = event.clientY - startY;
+    if (!moved && Math.hypot(dx, dy) < 6) return;
+    moved = true;
+    musicToggle.classList.add("is-dragging");
+    positionButton(startLeft + dx, startTop + dy);
+  });
+
+  function endDrag(event) {
+    if (!dragging) return;
+    dragging = false;
+    musicToggle.classList.remove("is-dragging");
+    if (musicToggle.hasPointerCapture && musicToggle.hasPointerCapture(event.pointerId)) {
+      musicToggle.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  musicToggle.addEventListener("pointerup", endDrag);
+  musicToggle.addEventListener("pointercancel", endDrag);
+
+  // Kalau baru saja digeser, jangan perlakukan sebagai klik (jangan toggle musik).
+  musicToggle.addEventListener("click", (event) => {
+    if (moved) {
+      event.stopImmediatePropagation();
+      moved = false;
+    }
+  }, true);
+
+  // Jaga posisi tetap di layar saat ukuran jendela berubah.
+  window.addEventListener("resize", () => {
+    const rect = musicToggle.getBoundingClientRect();
+    positionButton(rect.left, rect.top);
+  });
+}
+
 function handleAudioActivation(event) {
   // iOS/Android butuh play() SINKRON di dalam gesture.
   // JANGAN panggil load() di sini — load() mereset elemen dan membatalkan play().

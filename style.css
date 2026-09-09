@@ -1184,6 +1184,9 @@ body[data-theme="purple"] .live-card {
   position: fixed;
   right: 24px;
   top: 24px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
   z-index: 90;
   display: inline-flex;
   align-items: center;
@@ -1209,6 +1212,13 @@ body[data-theme="purple"] .live-card {
   border-color: rgba(255,255,255,.8);
   background: rgba(67, 38, 111, .9);
   box-shadow: 0 14px 32px rgba(18, 11, 32, .35), 0 0 0 4px rgba(110, 70, 190, .16);
+}
+
+.music-toggle.is-dragging {
+  cursor: grabbing;
+  transition: none;
+  transform: none;
+  opacity: .92;
 }
 
 .music-toggle:focus-visible {
