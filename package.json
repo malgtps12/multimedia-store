@@ -1,22 +1,21 @@
 {
-  "name": "multimedia-store-backend",
+  "name": "mxl-portfolio",
   "version": "1.0.0",
-  "description": "Simple backend for multimedia store checkout and DANA payment flow",
-  "main": "server.js",
+  "description": "Portfolio website untuk Muhammad Jamaluddin (MXL), mahasiswa Teknologi Rekayasa Multimedia",
+  "main": "index.html",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "npx http-server -p 8080 -c-1",
+    "build": "echo 'This is a static site, no build step needed'"
   },
   "keywords": [
-    "express",
-    "checkout",
-    "dana"
+    "portfolio",
+    "multimedia",
+    "animation",
+    "gsap"
   ],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@vercel/speed-insights": "^2.0.0",
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+  "author": "Muhammad Jamaluddin",
+  "license": "Copyright © 2026 Muhammad Jamaluddin. All Rights Reserved.",
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
